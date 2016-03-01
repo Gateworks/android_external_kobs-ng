@@ -217,6 +217,7 @@ int extract_main(int argc, char **argv)
 			case '1':
 				image = 1;
 				break;
+#ifndef NO_CRYPTO
 			case 'd':
 				device_key = 1;	/* use device key */
 				break;
@@ -229,6 +230,7 @@ int extract_main(int argc, char **argv)
 					exit(5);
 				}
 				break;
+#endif
 			case 'v':
 				flags |= F_VERBOSE;
 				break;
@@ -303,6 +305,7 @@ int extract_main(int argc, char **argv)
 
 	keyp = !device_key ? key : NULL;
 
+#ifndef NO_CRYPTO
 	if (flags & F_VERBOSE)
 		printf("%s: verifying using key '%s'\n", outfile,
 			vec_ascii(keyp, ascii));
@@ -317,6 +320,7 @@ int extract_main(int argc, char **argv)
 		printf("%s: is %s bootstream for key '%s'\n", outfile,
 			r == 0 ? "a valid" : "an INVALID",
 			vec_ascii(keyp, ascii));
+#endif
 
 	/* now truncate to actual size (which is only possible to find after
 	 * decoding the whole bootstream; what a drag...
@@ -486,6 +490,7 @@ int update_main(int argc, char **argv)
 			case '1':
 				image_mask |= 1 << 1;
 				break;
+#ifndef NO_CRYPTO
 			case 'd':
 				device_key = 1;	/* use device key */
 				break;
@@ -498,6 +503,7 @@ int update_main(int argc, char **argv)
 					exit(5);
 				}
 				break;
+#endif
 			case 'v':
 				flags |= F_VERBOSE;
 				break;
@@ -517,6 +523,7 @@ int update_main(int argc, char **argv)
 		usage();
 	}
 
+#ifndef NO_CRYPTO
 	keyp = !device_key ? key : NULL;
 
 	if (flags & F_VERBOSE)
@@ -533,6 +540,7 @@ int update_main(int argc, char **argv)
 		printf("%s: is %s bootstream for key '%s'\n", infile,
 			r == 0 ? "a valid" : "an INVALID",
 			vec_ascii(keyp, ascii));
+#endif
 
 	md = mtd_open(&cfg, flags);
 	if (md == NULL) {
@@ -564,7 +572,7 @@ static char *padding_1k_in_head(char *file_name)
 	int sz = getpagesize();
 
 	from = open(file_name, O_RDONLY);
-	to = open(tmp_file, O_CREAT | O_RDWR);
+	to = open(tmp_file, O_CREAT | O_RDWR, 0755);
 	if (from < 0 || to < 0) {
 		fprintf(stderr, "unable to create a temporary file\n");
 		exit(5);
@@ -644,6 +652,7 @@ int init_main(int argc, char **argv)
 			case 'x':
 				padding = 1;
 				break;
+#ifndef NO_CRYPTO
 			case 'd':
 				device_key = 1;	/* use device key */
 				break;
@@ -656,6 +665,7 @@ int init_main(int argc, char **argv)
 					exit(5);
 				}
 				break;
+#endif
 			case 'v':
 				flags |= F_VERBOSE;
 				break;
@@ -684,6 +694,7 @@ int init_main(int argc, char **argv)
 		usage();
 	}
 
+#ifndef NO_CRYPTO
 	keyp = !device_key ? key : NULL;
 
 	if (flags & F_VERBOSE)
@@ -700,6 +711,7 @@ int init_main(int argc, char **argv)
 		printf("%s: is %s bootstream for key '%s'\n", infile,
 			r == 0 ? "a valid" : "an INVALID",
 			vec_ascii(keyp, ascii));
+#endif
 
 	md = mtd_open(&cfg, flags);
 	if (md == NULL) {
@@ -780,6 +792,7 @@ int imgverify_main(int argc, char **argv)
 		}
 
 		switch (argv[i][1]) {
+#ifndef NO_CRYPTO
 			case 'd':
 				device_key = 1;	/* use device key */
 				break;
@@ -792,6 +805,7 @@ int imgverify_main(int argc, char **argv)
 					exit(5);
 				}
 				break;
+#endif
 			case 'v':
 				flags |= F_VERBOSE;
 				break;
@@ -804,6 +818,7 @@ int imgverify_main(int argc, char **argv)
 		usage();
 	}
 
+#ifndef NO_CRYPTO
 	keyp = !device_key ? key : NULL;
 
 	if (flags & F_VERBOSE)
@@ -820,6 +835,7 @@ int imgverify_main(int argc, char **argv)
 		printf("%s: is %s bootstream for key '%s'\n", infile,
 			r == 0 ? "a valid" : "an INVALID",
 			vec_ascii(keyp, ascii));
+#endif
 
 out:
 	fclose(infp);
