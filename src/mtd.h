@@ -31,6 +31,14 @@
 #include "BootControlBlocks.h"
 #include "rom_nand_hamming_code_ecc.h"
 
+// Newer kernel headers renamed define
+#ifndef MTD_MODE_NORMAL
+#define MTD_MODE_NORMAL MTD_FILE_MODE_NORMAL
+#endif
+#ifndef MTD_MODE_RAW
+#define MTD_MODE_RAW MTD_FILE_MODE_RAW
+#endif
+
 //------------------------------------------------------------------------------
 // Re-definitions of true and false, because the standard ones aren't good
 // enough?

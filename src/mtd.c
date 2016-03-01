@@ -852,8 +852,11 @@ void mtd_close(struct mtd_data *md)
 		mp = &md->part[i];
 
 		if (mp->fd != -1) {
+/* Newer kernels dropped MEMSETOOBSEL */
+#ifdef MEMSETOOBSEL
 			(void)ioctl(mp->fd, MEMSETOOBSEL,
 					&mp->old_oobinfo);
+#endif
 			close(mp->fd);
 		}
 
@@ -896,6 +899,8 @@ int mtd_set_ecc_mode(struct mtd_data *md, int ecc)
 				continue;
 			}
 
+/* Newer kernels dropped MEMSETOOBSEL */
+#ifdef MEMSETOOBSEL
 			if (r == -ENOTTY) {
 				r = ioctl(mp->fd, MEMSETOOBSEL, &mp->old_oobinfo);
 				if (r != 0) {
@@ -904,6 +909,7 @@ int mtd_set_ecc_mode(struct mtd_data *md, int ecc)
 				}
 				mp->oobinfochanged = 0;
 			}
+#endif
 		} else {
 			r = ioctl(mp->fd, MTDFILEMODE, (void *)MTD_MODE_RAW);
 			if (r != 0 && r != -ENOTTY) {
@@ -911,6 +917,8 @@ int mtd_set_ecc_mode(struct mtd_data *md, int ecc)
 				continue;
 			}
 
+/* Newer kernels dropped MEMSETOOBSEL */
+#ifdef MEMSETOOBSEL
 			if (r == -ENOTTY) {
 				r = ioctl(mp->fd, MEMSETOOBSEL, &none_oobinfo);
 				if (r != 0) {
@@ -920,6 +928,7 @@ int mtd_set_ecc_mode(struct mtd_data *md, int ecc)
 				mp->oobinfochanged = 1;
 			} else
 				mp->oobinfochanged = 2;
+#endif
 		}
 
 		mp->ecc = ecc;
