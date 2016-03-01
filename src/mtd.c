@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 #include <fcntl.h>
 #include <ctype.h>
 #include <errno.h>
