@@ -716,6 +716,11 @@ struct mtd_data *mtd_open(const struct mtd_config *cfg, int flags)
 			goto out;
 		}
 
+		/* override MTD size */
+		if (md->cfg.chip_0_size) {
+			miu->size = md->cfg.chip_0_size;
+		}
+
 		/* verify it's a nand */
 		if (miu->type != MTD_NANDFLASH) {
 			fprintf(stderr, "mtd: device %s not NAND\n", mp->name);
@@ -2914,7 +2919,7 @@ static const struct {
 } mtd_int_args[] = {
 	ARG_IGNORE(chip_count),
 	ARG_IGNORE(chip_0_offset),
-	ARG_IGNORE(chip_0_size),
+	ARG(chip_0_size),
 	ARG_IGNORE(chip_1_offset),
 	ARG_IGNORE(chip_1_size),
 	ARG(search_exponent),
@@ -3107,7 +3112,7 @@ void mtd_cfg_dump(struct mtd_config *cfg)
 //	Pd(chip_count);
 	Ps(chip_0_device_path);
 //	Pd(chip_0_offset);
-//	Pd(chip_0_size);
+	Pd(chip_0_size);
 	Ps(chip_1_device_path);
 //	Pd(chip_1_offset);
 //	Pd(chip_1_size);
