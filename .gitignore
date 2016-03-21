@@ -33,10 +33,8 @@ modules.builtin
 *.gcno
 config.log
 config.status
-src/Makefile
 src/kobs-ng
 src/tags
-Makefile
 
 #
 # Top-level generic files
@@ -61,10 +59,8 @@ Makefile
 # Generated include files
 #
 include/config
-include/config.h
 include/linux/version.h
 include/generated
-include/autoversion.h
 include/stamp-h1
 
 # stgit generated dirs
